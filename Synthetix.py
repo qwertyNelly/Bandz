@@ -3,13 +3,14 @@ from synthetix.core import Core
 from os import environ
 from kwenta import kwenta
 from web3 import providers
+import json
 
-perp_account_id = "170141183460469231731687303715884106451"
-snx_account_id = 170141183460469231731687303715884105760
+perp_account_id = environ.get('PERP_ACCOUNT_ID']
+snx_account_id = environ.get('SNX_ACCOUNT_ID')
 
-wallet = environ.get("WALLET", "0x71bd2Cc3599C129cE73144b3C1B7d172c0BA0187")
+wallet = environ.get("WALLET")
 pk = environ.get(
-    "PK", "0xb89e05c7c81e1471463e6c14b9bffa7ac3c36e8e52e1e2d2fc220389f290473d"
+    "PK"
 )
 
 snx = Synthetix(
@@ -161,12 +162,9 @@ print(snx.perps.get_open_positions())
 providers.rpc.HTTPProvider()
 wallet = environ.get("WALLET", "0x589197b4AFC9E50A2cc872540a3760C624BBF97c")
 pk = environ.get(
-    "PK", "8c62c64b949fece7ff1cbc04456d82b13202960afd6cd542f2b585bd3c142c10"
+    "PK", 
 )
 account = None
-
-
-print(kwn.sm_account)
 
 
 def get_accounts() -> dict:
