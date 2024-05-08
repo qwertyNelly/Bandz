@@ -5,7 +5,7 @@ from kwenta import kwenta
 from web3 import providers
 import json
 
-perp_account_id = environ.get('PERP_ACCOUNT_ID']
+perp_account_id = environ.get('PERP_ACCOUNT_ID')
 snx_account_id = environ.get('SNX_ACCOUNT_ID')
 
 wallet = environ.get("WALLET")
