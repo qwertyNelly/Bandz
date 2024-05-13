@@ -1,26 +1,16 @@
+#!/usr/bin/env python3
 from hyperliquid.info import Info
 from hyperliquid.utils.constants import MAINNET_API_URL as mainnet
 from hyperliquid.utils.error import ClientError, ServerError
-from hyperliquid.utils.types import (
-    L2BookDataType,
-    L2BookMsgType,
-    L2Book,
-    Trade,
-    L2Book,
-    TradesMsgType,
-    L2Book,
-    TradesSubscription,
-)
 from HL.logging import LOGGING_CONFIG
 import os
 import logging as lg
 import logging.config as lgc
-
 from HL.errors.PositionExceptions import WalletNotFoundError
-
-
 from logging import getLogger as gl, StreamHandler as sh
 import logging.config as lgc
+
+from HL.utils import val_wallet_is_in_env
 
 
 lgc.dictConfig(LOGGING_CONFIG)
@@ -30,6 +20,10 @@ log.debug(f"Initialized Logger for {__name__}")
 log.debug(f"Initializing Hyperliquid Connection to {mainnet}")
 hl = Info(mainnet)
 log.debug(f"Connected to Hyperliquid @ {mainnet} with URL {hl.base_url}")
+
+val_wallet_is_in_env()
+
+_wallet = os.environ.get("WALLET")
 
 
 class position:
@@ -43,7 +37,7 @@ class position:
     """
 
     # Account
-    wallet: str
+    _wallet: str = _wallet
 
     # Funding
     funding_all_time: float = 0.0
@@ -70,71 +64,48 @@ class position:
     total_cross_margin_used: float = 0.0
     total_margin_used: float = 0.0
     notional_value: float = 0.0
-    
+
     account_margin_used: float = 0.0
-    account_notional_position : float = 0.0
-    account_raw_usd : float = 0.0
-    funds_withdrawlable : float = 0.0
-    time : int = 0
+    account_notional_position: float = 0.0
+    account_raw_usd: float = 0.0
+    funds_withdrawable: float = 0.0
+    time: int = 0
 
     position_dict: dict = {}
-
+    position_strength: float
     # Only Iso
     raw_usd: str = ""
     total_raw_usd: float = 0.0
 
-    def __init__(self, position_data: dict, wallet: str = None):
-        self.wallet = wallet
-        self.position_dict = position_data
+    def __init__(self, position_strength: float = 0.0):
+        self.position_strength = position_strength
 
     @property
-    def leverage_type(self):
-        """
-        Probably not needed
-        """
-        self.leverage_type = ""
-
-    @property
-    def wallet(self):
-        """
-        String of the wallet
+    def position_state(self):
+        """_summary_
 
         Raises:
             WalletNotFoundError: _description_
+            WalletNotFoundError: _description_
+
+        Returns:
+            _type_: _description_
         """
-        if self.wallet is None:
-            self.wallet = os.environ.get("WALLET")
-            return os.environ.get("WALLET")
-        # TODO: Add better exception handling
-        else:
-            raise WalletNotFoundError("Wallet not configured")
-
-    @wallet.setter
-    def wallet(self, wallet: str):
-        self.wallet = wallet
-
-    @wallet.getter
-    def wallet(self):
-        if self.wallet is None:
-            self.wallet = os.environ.get("WALLET")
-            return os.environ.get("WALLET")
-        # TODO: Add better exception handling
-        else:
-            raise WalletNotFoundError("Wallet not configured")
 
     @classmethod
     def init_position(cls, position: dict):
-        """
-        Run this First
+        """_summary_
+
         Args:
-            position (dict): the shit coming from the api
+            position (dict): _description_
+
+        Raises:
+            KeyError: _description_
+
+        Returns:
+            self: _description_
         """
-        # Time spent (Wasted) : 34 minutes
-        # hate = ['szi', 'entryPx', 'liquidationPx', 'positionValue', 'marginUsed']
-        # for why in hate:
-        #     #TODO: Iterate and get the class variable - good look
-        # TODO: Think about this if statement, its not gonna work long term
-        if "position" in position.keys:
+        try:
             print(f"Keys : {position.keys()}")
             cls.coin = position["position"]["coin"]
             cls.size = position["position"]["coin"]["szi"]
@@ -174,16 +145,13 @@ class position:
             cls.notional_value = float(
                 position["position"]["marginSummary"]["totalNtlPos"]
             )
-            # Margin Summary (Both Iso and Cross)
-            cls.total_margin_account_value = float(
-                position["marginSummary"]["accountValue"]
-            )
-            cls.account_margin_used = float(
-                position["marginSummary"]["totalMarginUsed"]
-            )
-            cls.
-
             return cls
+        except KeyError as e:
+            raise KeyError(f"KEYERROR: Could not find {e.args}")
+
+    def parse_positions(self):
+        for index, val in enumerate(self.positions):
+            log.info(f"Parsing Position {index} for {val}")
 
     def get_positions(self) -> dict:
         """{'assetPositions':
@@ -208,4 +176,20 @@ class position:
         Returns:
             dict: _description_
         """
+        # Only Feed under AssetPositions
+        self.position_dict = hl.user_state(self.wallet)["assetPositions"]
         return hl.user_state(self.wallet)["assetPositions"]
+
+    def get_account_info(self):
+        """
+        crossMarginSummary: MarginSummary,
+        marginSummary: MarginSummary,
+        withdrawable: float string,
+
+        Returns:
+            _type_: _description_
+        """
+        return hl.user_state(self.wallet)
+
+    def get_cross_margin_info(self):
+        pass

@@ -1,6 +1,7 @@
 #!
 from HL.Position import position
 from HL.logging import LOGGING_CONFIG
+from HL.utils import setup
 
 from hyperliquid.info import Info
 from hyperliquid.utils.constants import MAINNET_API_URL as mainnet
@@ -16,43 +17,92 @@ log = lg.getLogger(__name__)
 log.debug(f"Initialized Logger for {__name__}")
 log.debug(f"Initializing Hyperliquid Connection to {mainnet}")
 # Static Condition Class
-wallet = os.environ.get("WALLET")
+
+
+address, info, exchange = setup(mainnet)
+print(address, info, exchange)
+_wallet = os.environ.get("WALLET")
 # Check if wallet is loaded in the env. If not exit
-if wallet is None or len(wallet) == 0:
+if _wallet is None or len(_wallet) == 0:
     log.error("No wallet")
+    # TODO: Add exit codes
     sys.exit(404)
 
 
-
-
-hl = Info(mainnet)
-log.debug(f"Connected to Hyperliquid @ {mainnet} with URL {hl.base_url}")
+hl_info = Info(mainnet)
+log.debug(f"Connected to Hyperliquid @ {mainnet} with URL {hl_info.base_url}")
 
 
 class account:
-    
-    
-    position_holder : position = position(wallet=wallet)
+
+    positions: list[position]
     account_name: str
+    _wallet: str
     positions: position
-    cross_margin_summary : float | str
-    total_margin_used : float | str
-    account_value : float | str 
-    total_notional_value : float | str
-    total_raw_usd : float | str
-    account_data : dict
-    hl_user_state : dict
-    
-    def __init__(self, wallet : str):
+    cross_margin_summary: float | str
+    total_margin_used: float | str
+    account_value: float | str
+    total_notional_value: float | str
+    total_raw_usd: float | str
+    account_data: dict
+    hl_user_state: dict
+    hl_info: Info
+    withdrawable: float | str
+
+    def __init__(self):
         self.hl_info = Info(mainnet)
-        self.hl_user_state = self.hl_info.user_state(wallet)
-        self.account_data = self.hl_info.get_positions()
-        self.account_positions = self.account_data['assetPositions']
-        self.account_value = self.account_data['marginSummary']['accountValue']
-        self.total_margin_used = self.account_data['marginSummary']['totalMarginUsed']
-        self.total_notional_value = self.account_data['marginSummary']['totalNtlPos']
-        self.total_raw_usd = self.account_data['marginSummary']['totalNtlPos']
-    
+        log.info(f"Initializing Property of the user state for {_wallet}")
+        log.debug(f"Getting the Positions for {_wallet}")
+        self.account_data = self.hl_info.user_state(_wallet)
+        log.debug(f"Positions: {self.account_data}")
+        # Fill Account
+
+        # Build Positions
+
     @property
-    def positions(self):
-        account_data = 
+    def _wallet(self):
+        log.info(f"Initializing wallet : {_wallet} info from the environment")
+
+    def update_positions(self):
+        pass
+
+    def get_margin_summary(self):
+        log.info(f"Parsing Margin Summary for {_wallet}")
+        if "accountValue" in self.account_data["marginSummary"]:
+            log.info(f"Filling Margin Summary Information for {self.account_wallet}")
+            self.account_value = float(
+                self.account_data["marginSummary"]["accountValue"]
+            )
+            self.total_margin_used = float(
+                self.account_data["marginSummary"]["totalMarginUsed"]
+            )
+            self.total_notional_value = float(
+                self.account_data["marginSummary"]["totalNtlPos"]
+            )
+            self.total_raw_usd = float(
+                self.account_data["marginSummary"]["totalNtlPos"]
+            )
+
+    def get_cross_margin_summary(self):
+        if "accountValue" in self.account_data["marginSummary"]:
+            log.info(f"Filling Margin Summary Information for {self.account_wallet}")
+            self.account_value = float(
+                self.account_data["crossMarginSummary"]["accountValue"]
+            )
+            self.total_margin_used = float(
+                self.account_data["crossMarginSummary"]["totalMarginUsed"]
+            )
+            self.total_notional_value = float(
+                self.account_data["crossMarginSummary"]["totalNtlPos"]
+            )
+            self.total_raw_usd = float(
+                self.account_data["crossMarginSummary"]["totalNtlPos"]
+            )
+
+    def fill_account_data(self):
+        self.account_positions = self.account_data["assetPositions"]
+        self.withdrawable = self.account_data["assetPositions"]["withdrawable"]
+
+
+if __name__ == "__main__":
+    a = account()
