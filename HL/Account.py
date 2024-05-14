@@ -1,12 +1,9 @@
-#!
+#!/Users/ben/Desktop/bndni/.venv/bin python3.11
 from HL.Position import position
 from HL.logging import LOGGING_CONFIG
-from HL.utils import setup
-
+from HL.utils import setup, val_wallet_is_in_env
 from hyperliquid.info import Info
 from hyperliquid.utils.constants import MAINNET_API_URL as mainnet
-
-
 import logging as lg
 import logging.config as lgc
 import os
@@ -21,6 +18,7 @@ log.debug(f"Initializing Hyperliquid Connection to {mainnet}")
 
 address, info, exchange = setup(mainnet)
 print(address, info, exchange)
+val_wallet_is_in_env()
 _wallet = os.environ.get("WALLET")
 # Check if wallet is loaded in the env. If not exit
 if _wallet is None or len(_wallet) == 0:
@@ -37,7 +35,7 @@ class account:
 
     positions: list[position]
     account_name: str
-    _wallet: str
+    _wallet: str = _wallet
     positions: position
     cross_margin_summary: float | str
     total_margin_used: float | str
