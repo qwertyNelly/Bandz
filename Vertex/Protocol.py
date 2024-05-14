@@ -25,10 +25,6 @@ _pk = os.environ.get("PK")
 _wallet = os.environ.get("WALLET")
 
 l_account = Account.from_key(_pk)
-blast3 = web3.Web3(
-    web3.WebsocketProviderV2("wss://gateway.blast-prod.vertexprotocol.com/v1/ws")
-)
-print(blast3)
 vtrx_client = create_vertex_client("blast-mainnet", signer=l_account)
 
 btc_usd_perp = vtrx_client.subaccount.get_subaccounts()
