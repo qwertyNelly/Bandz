@@ -1,7 +1,8 @@
-#!/Users/ben/Desktop/bndni/.venv/bin python3.11
-from HL.Position import position
-from HL.logging import LOGGING_CONFIG
-from HL.utils import setup, val_wallet_is_in_env
+#/Users/I516172/Desktop/Bandz/.venv/bin python3
+from HL.src.Position import position
+from HL.globals import EXCHANGE, INFO, ADDRESS
+from HL.util.logging import LOGGING_CONFIG
+from HL.util.utils import setup, val_wallet_is_in_env
 from hyperliquid.info import Info
 from hyperliquid.utils.constants import MAINNET_API_URL as mainnet
 import logging as lg
@@ -100,6 +101,9 @@ class account:
     def fill_account_data(self):
         self.account_positions = self.account_data["assetPositions"]
         self.withdrawable = self.account_data["assetPositions"]["withdrawable"]
+        for position in self.account_positions['position']:
+            print(position)
+
 
 
 if __name__ == "__main__":

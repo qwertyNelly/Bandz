@@ -1,16 +1,20 @@
-#!/usr/bin/env python3
+#/Users/I516172/Desktop/Bandz/.venv/bin python3
 from hyperliquid.info import Info
+from HL.globals import EXCHANGE, INFO, ADDRESS, DEFAULT_SLIPPAGE
 from hyperliquid.utils.constants import MAINNET_API_URL as mainnet
 from hyperliquid.utils.error import ClientError, ServerError
-from HL.logging import LOGGING_CONFIG
+
+from HL.util.logging import LOGGING_CONFIG
+from hyperliquid.utils.types import Any, List, Meta, SpotMeta, Optional, Tuple, Cloid
 import os
 import logging as lg
 import logging.config as lgc
-from HL.errors.PositionExceptions import WalletNotFoundError
+from HL.errors.PositionExceptions import WalletNotFoundError, PositionAlreadyExists
 from logging import getLogger as gl, StreamHandler as sh
 import logging.config as lgc
+import time
 
-from HL.utils import val_wallet_is_in_env
+from HL.util.utils import val_wallet_is_in_env
 
 
 lgc.dictConfig(LOGGING_CONFIG)
@@ -39,6 +43,7 @@ class position:
     # Account
     _wallet: str = _wallet
 
+
     # Funding
     funding_all_time: float = 0.0
     funding_since_change: float = 0.0
@@ -54,8 +59,13 @@ class position:
 
     # Position Type
     coin: str = ""
+    is_buy : bool
 
-    leverage: int = 0
+    # Position Active?
+     
+    active : bool = False
+
+    leverage: float = 0.0
     leverage_type: str = "cross"  # Default to ISO
 
     margin_used: float = 0.0
@@ -77,20 +87,35 @@ class position:
     raw_usd: str = ""
     total_raw_usd: float = 0.0
 
-    def __init__(self, position_strength: float = 0.0):
-        self.position_strength = position_strength
+    def __init__(self, size : float, leverage : float, strategy ):
+        self.size = size
+        self.leverage = leverage
+        self.position_strat = strategy
 
     @property
-    def position_state(self):
-        """_summary_
+    def active(self):
+        log.debug(f'Checking if Position Exists or is Active')
+        if self.entry_price == 0 or self.entry_price is None:
+            raise PositionAlreadyExists()
+        else:
+            if isinstance(self.coin, str):
+                # must be Coin assigned to position
+                if len(self.coin) > 0:
+                    log.debug(f'Found Active Position for {self.coin}')
+                    self.active = True
+                else:
+                    raise PositionAlreadyExists()
+            else:
+                raise PositionAlreadyExists()
 
-        Raises:
-            WalletNotFoundError: _description_
-            WalletNotFoundError: _description_
 
-        Returns:
-            _type_: _description_
-        """
+
+
+
+    @classmethod
+    def attach_strategy(cls, strategy):
+        pass
+
 
     @classmethod
     def init_position(cls, position: dict):
@@ -118,8 +143,8 @@ class position:
                 "sinceOpen"
             ]
             # Leverage
-            cls.leverage = position["position"]["coin"]["leverage"]["value"]
-            cls.leverage_type = position["position"]["coin"]["leverage"]["type"]
+            cls.leverage = float(position["position"]["coin"]["leverage"]["value"])
+            cls.leverage_type = float(position["position"]["coin"]["leverage"]["type"])
             cls.max_leverage = position["position"]["coin"]["maxLeverage"]
             # Coin Value
             cls.entry_price = position["position"]["coin"]["entryPx"]
@@ -149,6 +174,65 @@ class position:
         except KeyError as e:
             raise KeyError(f"KEYERROR: Could not find {e.args}")
 
+    def _slippage_price(
+        self,
+        is_buy: bool,
+        px: Optional[float] = None,
+    ) -> float:
+        """_summary_
+
+        Args:
+            is_buy (bool): _description_
+            px (Optional[float], optional): _description_. Defaults to None.
+
+        Returns:
+            float: _description_
+        """
+        slippage = self._slippage_price(is_buy, px)
+
+        if not px:
+            # Get midprice
+            px = float(self.info.all_mids()[self.coin])
+        # Calculate Slippage
+        px *= (1 + slippage) if is_buy else (1 - slippage)
+        # We round px to 5 significant figures and 6 decimals
+        return round(float(f"{px:.5g}"), 6)
+
+    def get_market_price(self, is_buy: bool,  px, slippage : float = DEFAULT_SLIPPAGE):
+        # Get aggressive Market Price
+        return self._slippage_price(self.coin, is_buy, slippage, px)
+
+    @classmethod
+    def market_order(cls, 
+                     coin : str, 
+                     sz : float, 
+                     is_buy : bool, 
+                     leverage : float
+                     ):
+        print(f"We try to Market {'Buy' if is_buy else 'Sell'} {sz} {coin}.")
+
+        order_result = EXCHANGE.market_open(coin, is_buy, sz, None, 0.01)
+        if order_result["status"] == "ok":
+            for status in order_result["response"]["data"]["statuses"]:
+                try:
+                    filled = status["filled"]
+                    print(f'Order #{filled["oid"]} filled {filled["totalSz"]} @{filled["avgPx"]}')
+                except KeyError:
+                    print(f'Error: {status["error"]}')
+
+            print("We wait for 2s before closing")
+            time.sleep(2)
+
+            print(f"We try to Market Close all {coin}.")
+            order_result = EXCHANGE.market_close(coin)
+            if order_result["status"] == "ok":
+                for status in order_result["response"]["data"]["statuses"]:
+                    try:
+                        filled = status["filled"]
+                        print(f'Order #{filled["oid"]} filled {filled["totalSz"]} @{filled["avgPx"]}')
+                    except KeyError:
+                        print(f'Error: {status["error"]}')
+        
     def parse_positions(self):
         for index, val in enumerate(self.positions):
             log.info(f"Parsing Position {index} for {val}")
