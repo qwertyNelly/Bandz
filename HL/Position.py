@@ -4,11 +4,13 @@ from hyperliquid.utils.constants import MAINNET_API_URL as mainnet
 from hyperliquid.utils.error import ClientError, ServerError
 from HL.logging import LOGGING_CONFIG
 import os
+from dotenv import load_dotenv
 import logging as lg
 import logging.config as lgc
 from HL.errors.PositionExceptions import WalletNotFoundError
 from logging import getLogger as gl, StreamHandler as sh
 import logging.config as lgc
+import json
 
 from HL.utils import val_wallet_is_in_env
 
@@ -77,23 +79,12 @@ class position:
     raw_usd: str = ""
     total_raw_usd: float = 0.0
 
-    def __init__(self, position_strength: float = 0.0):
+    def __init__(self, account_data: dict, position_strength: float = 0.0):
         self.position_strength = position_strength
+        self.account_data = account_data
+        self.init_position()
 
-    @property
-    def position_state(self):
-        """_summary_
-
-        Raises:
-            WalletNotFoundError: _description_
-            WalletNotFoundError: _description_
-
-        Returns:
-            _type_: _description_
-        """
-
-    @classmethod
-    def init_position(cls, position: dict):
+    def init_position(self) -> None:
         """_summary_
 
         Args:
@@ -106,46 +97,30 @@ class position:
             self: _description_
         """
         try:
-            print(f"Keys : {position.keys()}")
-            cls.coin = position["position"]["coin"]
-            cls.size = position["position"]["coin"]["szi"]
+            position = self.account_data
+            log.debug(f"Keys : {position.keys()}")
+            log.debug(position)
+            self.coin = position["position"]["coin"]
+            print(self.coin)
+            self.size = float(position["position"]["szi"])
+            print(self.size)
             # Funding
-            cls.funding_all_time = position["position"]["coin"]["cumFunding"]["allTime"]
-            cls.funding_since_change = position["position"]["coin"]["cumFunding"][
+            self.funding_all_time = float(position["position"]["cumFunding"]["allTime"])
+            self.funding_since_change = position["position"]["cumFunding"][
                 "sinceChange"
             ]
-            cls.funding_since_open = position["position"]["coin"]["cumFunding"][
-                "sinceOpen"
-            ]
+            self.funding_since_open = position["position"]["cumFunding"]["sinceOpen"]
             # Leverage
-            cls.leverage = position["position"]["coin"]["leverage"]["value"]
-            cls.leverage_type = position["position"]["coin"]["leverage"]["type"]
-            cls.max_leverage = position["position"]["coin"]["maxLeverage"]
+            self.leverage = position["position"]["leverage"]["value"]
+            self.leverage_type = position["position"]["leverage"]["type"]
+            self.max_leverage = position["position"]["maxLeverage"]
             # Coin Value
-            cls.entry_price = position["position"]["coin"]["entryPx"]
-            cls.liquidation_price = position["position"]["coin"]["liquidationPx"]
-            cls.position_value = position["position"]["coin"]["positionValue"]
-            cls.margin_used = position["position"]["coin"]["marginUsed"]
-            cls.return_on_equity = position["position"]["coin"]["returnOnEquity"]
-            cls.leverage_type = position["position"]["coin"]["type"]
-            # ISO Margin
-            if cls.leverage_type.__eq__("isolated"):
-                cls.raw_usd = position["position"]["coin"]["leverage"]["rawUsd"]
-                cls.max_leverage = position["position"]["coin"]["leverage"]["rawUsd"]
-            # Cross Margin
-            cls.maintenance_margin = float(
-                position["position"]["coin"]["crossMaintenanceMarginUsed"]
-            )
-            cls.maintenance_margin = float(
-                position["position"]["coin"]["crossMarginSummary"]["accountValue"]
-            )
-            cls.total_cross_margin_used = float(
-                position["position"]["crossMarginSummary"]["totalMarginUsed"]
-            )
-            cls.notional_value = float(
-                position["position"]["marginSummary"]["totalNtlPos"]
-            )
-            return cls
+            self.entry_price = position["position"]["entryPx"]
+            self.liquidation_price = position["position"]["liquidationPx"]
+            self.position_value = position["position"]["positionValue"]
+            self.margin_used = position["position"]["marginUsed"]
+            self.return_on_equity = position["position"]["returnOnEquity"]
+            self.leverage_type = position["type"]
         except KeyError as e:
             raise KeyError(f"KEYERROR: Could not find {e.args}")
 
@@ -190,6 +165,3 @@ class position:
             _type_: _description_
         """
         return hl.user_state(self.wallet)
-
-    def get_cross_margin_info(self):
-        pass

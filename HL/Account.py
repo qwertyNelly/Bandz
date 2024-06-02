@@ -3,11 +3,13 @@ from HL.Position import position
 from HL.logging import LOGGING_CONFIG
 from HL.utils import setup, val_wallet_is_in_env
 from hyperliquid.info import Info
+from hyperliquid.utils.types import AssetInfo, MetaInfo, L2Level
 from hyperliquid.utils.constants import MAINNET_API_URL as mainnet
 import logging as lg
 import logging.config as lgc
 import os
 import sys
+import json
 
 lgc.dictConfig(LOGGING_CONFIG)
 log = lg.getLogger(__name__)
@@ -49,25 +51,32 @@ class account:
 
     def __init__(self):
         self.hl_info = Info(mainnet)
+        self._wallet = _wallet
+        self.positions: list[position] = []
         log.info(f"Initializing Property of the user state for {_wallet}")
         log.debug(f"Getting the Positions for {_wallet}")
         self.account_data = self.hl_info.user_state(_wallet)
+        for idx, pos in enumerate(self.account_data["assetPositions"]):
+            new_pos = position(pos)
+            log.debug(f"Adding asset  {new_pos.coin} to the Account {_wallet}")
+            self.positions.append(new_pos)
+            log.debug(
+                f"Adding asset {new_pos.coin} to the list of positions for {_wallet}"
+            )
+            print(new_pos.position_value)
+        print(self.positions)
         log.debug(f"Positions: {self.account_data}")
         # Fill Account
-
-        # Build Positions
-
-    @property
-    def _wallet(self):
-        log.info(f"Initializing wallet : {_wallet} info from the environment")
-
-    def update_positions(self):
-        pass
+        self.get_cross_margin_summary()
+        self.get_margin_summary()
+        self.fill_account_data()
+        for idx, p in enumerate(self.positions):
+            print(f"Position : {p.coin}, ROE : {p.return_on_equity}")
 
     def get_margin_summary(self):
         log.info(f"Parsing Margin Summary for {_wallet}")
-        if "accountValue" in self.account_data["marginSummary"]:
-            log.info(f"Filling Margin Summary Information for {self.account_wallet}")
+        try:
+            log.info(f"Filling Margin Summary Information for {self._wallet}")
             self.account_value = float(
                 self.account_data["marginSummary"]["accountValue"]
             )
@@ -80,10 +89,12 @@ class account:
             self.total_raw_usd = float(
                 self.account_data["marginSummary"]["totalNtlPos"]
             )
+        except (ValueError, KeyError) as e:
+            print(e)
 
     def get_cross_margin_summary(self):
-        if "accountValue" in self.account_data["marginSummary"]:
-            log.info(f"Filling Margin Summary Information for {self.account_wallet}")
+        try:
+            log.info(f"Filling Margin Summary Information for {self._wallet}")
             self.account_value = float(
                 self.account_data["crossMarginSummary"]["accountValue"]
             )
@@ -96,10 +107,15 @@ class account:
             self.total_raw_usd = float(
                 self.account_data["crossMarginSummary"]["totalNtlPos"]
             )
+        except (KeyError, ValueError) as e:
+            print(e)
 
     def fill_account_data(self):
-        self.account_positions = self.account_data["assetPositions"]
-        self.withdrawable = self.account_data["assetPositions"]["withdrawable"]
+        self.withdrawable = self.account_data["withdrawable"]
+        self.time = self.account_data["time"]
+
+    def market_buy(self, coin):
+        exchange.market_open()
 
 
 if __name__ == "__main__":

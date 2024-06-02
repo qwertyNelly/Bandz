@@ -9,6 +9,7 @@ import eth_account
 from eth_account.signers.local import LocalAccount
 import json
 import os
+from dotenv import load_dotenv
 
 from hyperliquid.exchange import Exchange
 from hyperliquid.info import Info
@@ -19,6 +20,8 @@ lgc.dictConfig(LOGGING_CONFIG)
 log = lg.getLogger(__name__)
 log.debug(f"Initialized Logger for {__name__}")
 log.debug(f"Initializing Hyperliquid Connection to {mainnet}")
+
+load_dotenv()
 
 
 def val_wallet_is_in_env() -> bool | WalletNotFoundError:
