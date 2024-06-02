@@ -1,8 +1,8 @@
-#!/usr/bin/env python3
+#/Users/I516172/Desktop/Bandz/.venv/bin python3
 # -*- coding: utf-8 -*-
 
 from HL.errors.PositionExceptions import WalletNotFoundError
-from HL.logging import LOGGING_CONFIG
+from HL.util.logging import LOGGING_CONFIG
 import logging as lg
 import logging.config as lgc
 import eth_account
