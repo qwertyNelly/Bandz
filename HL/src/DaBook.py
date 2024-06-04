@@ -5,12 +5,15 @@ import logging as lg
 import logging.config as lgc
 
 log = lg.getLogger(__name__)
+
 class DaBook:
+    lsleveli : int = 0
     lslevel: L2Level
     lsbook : L2BookData # list[L2Level]
     l2book_msg : L2BookMsg # for WS
+    lsboob_sub : L2BookSubscription
 
-    def __init__(self, price : float, coin : str, size : float) -> None:
+    def __init__(self, price : float, coin : str, size : float, levelnumber : int = 0) -> None:
         """_summary_
 
         Args:
@@ -18,15 +21,17 @@ class DaBook:
             coin (str): _description_
             size (float): _description_
         """
-        self.lslevel = [L2Level(px=price, size=size)]
-        self.levelsi : int = len(self.level)
-        self.l2book_msg = []
-        self.lsbook = L2BookData(levels=self.level, coin = self.coin, n)
         self.coin = coin
+        self.lslevel = [L2Level(px=price, size=size)]
+        self.l2book_msg = []
+        self.levelsi : int = levelnumber
+        self.lsbook = L2BookData(levels=self.level, coin= coin = self.coin, n = levelnumber)
+        self.lsbook_sub = L2BookSubscription([self.lsbook])
         pass
 
     @classmethod
     def run_it(cls):
+        pass
 
 
     def add_level(self, lvl : L2Level):
