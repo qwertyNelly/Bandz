@@ -16,7 +16,7 @@ class DaBook:
     ws : WebsocketManager
     ws_active : bool
 
-    def __init__(self, price : float, coin : str, size : float, levelnumber : int = 0) -> None:
+    def __init__(self, price : float, coin : str, size : float) -> None:
         """_summary_
 
         Args:
@@ -25,12 +25,12 @@ class DaBook:
             size (float): _description_
         """
         super().__init__()
-        self.lslevel = [L2Level(px=price, size=size)]
+        self.lslevel = [L2Level(px=price, size=size)]  # type: list[L2Level]
         self.levelsi : int = len(self.lslevel)
         self.l2book_msg = [L2Level]
         self.coin = coin
         self.lsbook = L2BookData(levels=self.level, coin = self.coin, n = self.levelsi)
-        self.ws = WebsocketManager()
+        self.ws = None  # type: WebsocketManager
         self.ws_active = False
         pass
     
@@ -39,7 +39,10 @@ class DaBook:
         if self.ws is None:
             log.debug(f"ws is None at {__spec__}")
             log.debug(f"Creating new WebSocket")
-            self.ws = WebsocketManager()
+            try:
+                self.ws = WebsocketManager()
+            except ConnectionError as e:
+                raise e
         elif isinstance(self.ws, WebsocketManager):
             log.debug(f'Found an instance of WS in class. Checking if its active')
             self.ws
@@ -52,7 +55,7 @@ class DaBook:
         self.ws_active = True
         pass
         
-    @ws_active.__setter__
+    @ws_active.setter
     def ws_active(self, active : bool):
         self.ws_active = active
     
@@ -60,7 +63,7 @@ class DaBook:
     def ws_active(self):
         if self.ws_active:
             log.debug("ws is active")
-            if self.ws.is_alive:
+            if self.ws.is_alive():
                 log.debug("ws is alive")
             
             return self.ws        
