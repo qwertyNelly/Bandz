@@ -1,4 +1,4 @@
-#/Users/I516172/Desktop/Bandz/.venv/bin python3
+# /Users/I516172/Desktop/Bandz/.venv/bin python3
 from hyperliquid.info import Info
 from HL.globals import EXCHANGE, INFO, ADDRESS, DEFAULT_SLIPPAGE
 from hyperliquid.utils.constants import MAINNET_API_URL as mainnet
@@ -43,7 +43,6 @@ class position:
     # Account
     _wallet: str = _wallet
 
-
     # Funding
     funding_all_time: float = 0.0
     funding_since_change: float = 0.0
@@ -59,11 +58,11 @@ class position:
 
     # Position Type
     coin: str = ""
-    is_buy : bool
+    is_buy: bool
 
     # Position Active?
-     
-    active : bool = False
+
+    active: bool = False
 
     leverage: float = 0.0
     leverage_type: str = "cross"  # Default to ISO
@@ -87,35 +86,30 @@ class position:
     raw_usd: str = ""
     total_raw_usd: float = 0.0
 
-    def __init__(self, size : float, leverage : float, strategy ):
+    def __init__(self, size: float, leverage: float, strategy):
         self.size = size
         self.leverage = leverage
         self.position_strat = strategy
 
     @property
     def active(self):
-        log.debug(f'Checking if Position Exists or is Active')
+        log.debug(f"Checking if Position Exists or is Active")
         if self.entry_price == 0 or self.entry_price is None:
             raise PositionAlreadyExists()
         else:
             if isinstance(self.coin, str):
                 # must be Coin assigned to position
                 if len(self.coin) > 0:
-                    log.debug(f'Found Active Position for {self.coin}')
+                    log.debug(f"Found Active Position for {self.coin}")
                     self.active = True
                 else:
                     raise PositionAlreadyExists()
             else:
                 raise PositionAlreadyExists()
 
-
-
-
-
     @classmethod
     def attach_strategy(cls, strategy):
         pass
-
 
     @classmethod
     def init_position(cls, position: dict):
@@ -198,17 +192,12 @@ class position:
         # We round px to 5 significant figures and 6 decimals
         return round(float(f"{px:.5g}"), 6)
 
-    def get_market_price(self, is_buy: bool,  px, slippage : float = DEFAULT_SLIPPAGE):
+    def get_market_price(self, is_buy: bool, px, slippage: float = DEFAULT_SLIPPAGE):
         # Get aggressive Market Price
         return self._slippage_price(self.coin, is_buy, slippage, px)
 
     @classmethod
-    def market_order(cls, 
-                     coin : str, 
-                     sz : float, 
-                     is_buy : bool, 
-                     leverage : float
-                     ):
+    def market_order(cls, coin: str, sz: float, is_buy: bool, leverage: float):
         print(f"We try to Market {'Buy' if is_buy else 'Sell'} {sz} {coin}.")
 
         order_result = EXCHANGE.market_open(coin, is_buy, sz, None, 0.01)
@@ -216,7 +205,9 @@ class position:
             for status in order_result["response"]["data"]["statuses"]:
                 try:
                     filled = status["filled"]
-                    print(f'Order #{filled["oid"]} filled {filled["totalSz"]} @{filled["avgPx"]}')
+                    print(
+                        f'Order #{filled["oid"]} filled {filled["totalSz"]} @{filled["avgPx"]}'
+                    )
                 except KeyError:
                     print(f'Error: {status["error"]}')
 
@@ -229,10 +220,12 @@ class position:
                 for status in order_result["response"]["data"]["statuses"]:
                     try:
                         filled = status["filled"]
-                        print(f'Order #{filled["oid"]} filled {filled["totalSz"]} @{filled["avgPx"]}')
+                        print(
+                            f'Order #{filled["oid"]} filled {filled["totalSz"]} @{filled["avgPx"]}'
+                        )
                     except KeyError:
                         print(f'Error: {status["error"]}')
-        
+
     def parse_positions(self):
         for index, val in enumerate(self.positions):
             log.info(f"Parsing Position {index} for {val}")

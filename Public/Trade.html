@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+
+<html lang="en" data-theme="dark" style="color-scheme: dark; --wcm-color-fg-1: rgb(228,231,231); --wcm-color-fg-2: rgb(148,158,158); --wcm-color-fg-3: rgb(110,119,119); --wcm-color-bg-1: rgb(20,20,20); --wcm-color-bg-2: rgb(39,42,42); --wcm-color-bg-3: rgb(59,64,64); --wcm-color-overlay: rgba(255,255,255,0.1); --wcm-accent-color: #3396FF; --wcm-accent-fill-color: #FFFFFF; --wcm-z-index: 89; --wcm-background-color: #3396FF; --wcm-background-border-radius: 8px; --wcm-container-border-radius: 30px; --wcm-wallet-icon-border-radius: 15px; --wcm-wallet-icon-large-border-radius: 30px; --wcm-wallet-icon-small-border-radius: 7px; --wcm-input-border-radius: 28px; --wcm-button-border-radius: 10px; --wcm-notification-border-radius: 36px; --wcm-secondary-button-border-radius: 28px; --wcm-icon-button-border-radius: 50%; --wcm-button-hover-highlight-border-radius: 10px; --wcm-text-big-bold-size: 20px; --wcm-text-big-bold-weight: 600; --wcm-text-big-bold-line-height: 24px; --wcm-text-big-bold-letter-spacing: -0.03em; --wcm-text-big-bold-text-transform: none; --wcm-text-xsmall-bold-size: 10px; --wcm-text-xsmall-bold-weight: 700; --wcm-text-xsmall-bold-line-height: 12px; --wcm-text-xsmall-bold-letter-spacing: 0.02em; --wcm-text-xsmall-bold-text-transform: uppercase; --wcm-text-xsmall-regular-size: 12px; --wcm-text-xsmall-regular-weight: 600; --wcm-text-xsmall-regular-line-height: 14px; --wcm-text-xsmall-regular-letter-spacing: -0.03em; --wcm-text-xsmall-regular-text-transform: none; --wcm-text-small-thin-size: 14px; --wcm-text-small-thin-weight: 500; --wcm-text-small-thin-line-height: 16px; --wcm-text-small-thin-letter-spacing: -0.03em; --wcm-text-small-thin-text-transform: none; --wcm-text-small-regular-size: 14px; --wcm-text-small-regular-weight: 600; --wcm-text-small-regular-line-height: 16px; --wcm-text-small-regular-letter-spacing: -0.03em; --wcm-text-small-regular-text-transform: none; --wcm-text-medium-regular-size: 16px; --wcm-text-medium-regular-weight: 600; --wcm-text-medium-regular-line-height: 20px; --wcm-text-medium-regular-letter-spacing: -0.03em; --wcm-text-medium-regular-text-transform: none; --wcm-font-family: -apple-system, system-ui, BlinkMacSystemFont, 'Segoe UI', Roboto, Ubuntu, 'Helvetica Neue', sans-serif; --wcm-font-feature-settings: 'tnum' on, 'lnum' on, 'case' on; --wcm-success-color: rgb(38,181,98); --wcm-error-color: rgb(242, 90, 103); --wcm-overlay-background-color: rgba(0, 0, 0, 0.3); --wcm-overlay-backdrop-filter: none;"><link type="text/css" rel="stylesheet" id="dark-mode-custom-link"><link type="text/css" rel="stylesheet" id="dark-mode-general-link"><style lang="en" type="text/css" id="dark-mode-custom-style"></style><style lang="en" type="text/css" id="dark-mode-native-style"></style><style lang="en" type="text/css" id="dark-mode-native-sheet"></style><head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Synthetix V3 Markets Prototype</title>
+    
+    <script type="module" crossorigin="" src="/assets/index-97d4ee5b.js"></script>
+    <link rel="stylesheet" href="/assets/index-8bcad974.css">
+  <link rel="modulepreload" as="script" crossorigin="" href="/assets/index.es-53695345.js"><link rel="modulepreload" as="script" crossorigin="" href="/assets/http-842de293.js"><link rel="modulepreload" as="script" crossorigin="" href="/assets/index-abeab1c8.js"><link rel="modulepreload" as="script" crossorigin="" href="/assets/hooks.module-a59256f8.js"><style data-emotion="css-global" data-s=""></style><style data-emotion="css-global" data-s=""></style><style data-emotion="css-global" data-s=""></style><style data-emotion="css" data-s=""></style><link rel="modulepreload" as="script" crossorigin="" href="/assets/index-0019046f.js"><link rel="modulepreload" as="script" crossorigin="" href="/assets/index-97d4ee5b.js"><link rel="modulepreload" as="script" crossorigin="" href="/assets/index-306e85c4.js"><link rel="modulepreload" as="script" crossorigin="" href="/assets/browser-d1b4dd0b.js">
+</head>
+<body class="chakra-ui-dark">
+    <div id="root"><script id="chakra-script">
+        !(function(){
+            try
+            {
+                var a=function(c){
+                var v="(prefers-color-scheme: dark)",
+                h=window.matchMedia(v).matches?"dark":"light",
+                r=c==="system"?h:c,o=document.documentElement,s=document.body,
+                l="chakra-ui-light",d="chakra-ui-dark",i=r==="dark";
+                return s.classList.add(i?d:l),s.classList.remove(i?l:d),o.style.colorScheme=r,o.dataset.theme=r,r
+            },
+            n=a,m="dark",e="chakra-ui-color-mode",t=localStorage.getItem(e);t?a(t):localStorage.setItem(e,a(m))}catch(a){}})();</script>
+            <div data-rk="">
+                <style>
+                    [data-rk]{
+                        --rk-blurs-modalOverlay:blur(0px);
+                        --rk-fonts-body:SFRounded, ui-rounded, 
+                        "SF Pro Rounded", -apple-system, 
+                        BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+                        --rk-radii-actionButton:4px;
+                        --rk-radii-connectButton:4px;
+                        --rk-radii-menuButton:4px;
+                        --rk-radii-modal:8px;
+                        --rk-radii-modalMobile:8px;
+                        --rk-colors-accentColor:#00a4c4;
+                        --rk-colors-accentColorForeground:#ffffff;
+                        --rk-colors-actionButtonBorder:rgba(255, 255, 255, 0.04);
+                        --rk-colors-actionButtonBorderMobile:rgba(255, 255, 255, 0.08);--rk-colors-actionButtonSecondaryBackground:rgba(255, 255, 255, 0.08);
+                        --rk-colors-closeButton:rgba(224, 232, 255, 0.6);
+                        --rk-colors-closeButtonBackground:rgba(255, 255, 255, 0.08);--rk-colors-connectButtonBackground:#1A1B1F;
+                        --rk-colors-connectButtonBackgroundError:#FF494A;--rk-colors-connectButtonInnerBackground:linear-gradient(0deg, rgba(255, 255, 255, 0.075), rgba(255, 255, 255, 0.15));--rk-colors-connectButtonText:#FFF;--rk-colors-connectButtonTextError:#FFF;--rk-colors-connectionIndicator:#30E000;
+                        --rk-colors-downloadBottomCardBackground:linear-gradient(126deg, rgba(0, 0, 0, 0) 9.49%, rgba(120, 120, 120, 0.2) 71.04%), #1A1B1F;
+                        --rk-colors-downloadTopCardBackground:linear-gradient(126deg, rgba(120, 120, 120, 0.2) 9.49%, rgba(0, 0, 0, 0) 71.04%), #1A1B1F;--rk-colors-error:#FF494A;
+                        --rk-colors-generalBorder:rgba(255, 255, 255, 0.08);
+                        --rk-colors-generalBorderDim:rgba(255, 255, 255, 0.04);
+                        --rk-colors-menuItemBackground:rgba(224, 232, 255, 0.1);
+                        --rk-colors-modalBackdrop:rgba(0, 0, 0, 0.5);
+                        --rk-colors-modalBackground:#1A1B1F;
+                        --rk-colors-modalBorder:rgba(255, 255, 255, 0.08);
+                        --rk-colors-modalText:#FFF;
+                        --rk-colors-modalTextDim:rgba(224, 232, 255, 0.3);
+                        --rk-colors-modalTextSecondary:rgba(255, 255, 255, 0.6);
+                        --rk-colors-profileAction:rgba(224, 232, 255, 0.1);
+                        --rk-colors-profileActionHover:rgba(224, 232, 255, 0.2);
+                        --rk-colors-profileForeground:rgba(224, 232, 255, 0.05);
+                        --rk-colors-selectedOptionBorder:rgba(224, 232, 255, 0.1);
+                        --rk-colors-standby:#FFD641;
+                        --rk-shadows-connectButton:0px 4px 12px rgba(0, 0, 0, 0.1);
+                        --rk-shadows-dialog:0px 8px 32px rgba(0, 0, 0, 0.32);
+                        --rk-shadows-profileDetailsAction:0px 2px 6px rgba(37, 41, 46, 0.04);
+                        --rk-shadows-selectedOption:0px 2px 6px rgba(0, 0, 0, 0.24);
+                        --rk-shadows-selectedWallet:0px 2px 6px rgba(0, 0, 0, 0.24);--rk-shadows-walletLogo:0px 2px 16px rgba(0, 0, 0, 0.16);}</style><div class="css-1erjq25"><div class="css-1jksy1v"><div class="css-0"><h2 class="chakra-heading css-qn58lc"><a href="/">Synthetix V3 Markets</a> <span class="css-jpv923">PROTOTYPE</span></h2></div><div class="css-1q8b5yy"><a href="/spot/markets/ETH"><button type="button" class="chakra-button css-11agalb">Spot</button></a><a href="/perps/markets/ETH"><button type="button" class="chakra-button css-11agalb">Perps</button></a><a href="https://v3.synthetix.io/" target="_blank"><button type="button" class="chakra-button css-11agalb">LP<span class="chakra-button__icon css-1hzyiq5"><svg viewBox="0 0 24 24" focusable="false" class="chakra-icon css-onkibi" aria-hidden="true"><g fill="none" stroke="currentColor" stroke-linecap="round" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path><path d="M15 3h6v6"></path><path d="M10 14L21 3"></path></g></svg></span></button></a><a href="https://docs.synthetix.io/v/v3/"><button type="button" class="chakra-button css-11agalb">Docs<span class="chakra-button__icon css-1hzyiq5"><svg viewBox="0 0 24 24" focusable="false" class="chakra-icon css-onkibi" aria-hidden="true"><g fill="none" stroke="currentColor" stroke-linecap="round" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path><path d="M15 3h6v6"></path><path d="M10 14L21 3"></path></g></svg></span></button></a></div><div class="css-zdpt2t"><div class="css-k008qs"><div class="css-1q8b5yy"><div class="iekbcc0 ju367va ju367v1n" style=""><button class="iekbcc0 iekbcc9 ju367v73 ju367v7o ju367v9c ju367vn ju367vec ju367vex ju367v11 ju367v1c ju367v2b ju367v8o _12cbo8i3 ju367v8m _12cbo8i4 _12cbo8i6" type="button" data-testid="rk-connect-button">Connect Wallet</button></div></div></div></div></div><div class="css-ywmw8p"><div class="css-1ogkv"><div class="css-1end7q9"><h2 class="chakra-heading css-1a5kd4s"></h2><div class="css-1f1kulr"><a href="/spot/markets/BTC"><span class="css-8bcni0">BTC</span></a><a href="/spot/markets/LINK"><span class="css-8bcni0">LINK</span></a></div></div><div class="css-cgqoj6"><div style="width: 100%;"><div class="chakra-stack css-rn3w0w"><div data-status="warning" role="alert" class="chakra-alert css-10juagb"><span data-status="warning" class="chakra-alert__icon css-12aeql9"><svg viewBox="0 0 24 24" focusable="false" class="chakra-icon css-qk6lof"><path fill="currentColor" d="M11.983,0a12.206,12.206,0,0,0-8.51,3.653A11.8,11.8,0,0,0,0,12.207,11.779,11.779,0,0,0,11.8,24h.214A12.111,12.111,0,0,0,24,11.791h0A11.766,11.766,0,0,0,11.983,0ZM10.5,16.542a1.476,1.476,0,0,1,1.449-1.53h.027a1.527,1.527,0,0,1,1.523,1.47,1.475,1.475,0,0,1-1.449,1.53h-.027A1.529,1.529,0,0,1,10.5,16.542ZM11,12.5v-6a1,1,0,0,1,2,0v6a1,1,0,1,1-2,0Z"></path></svg></span><div class="css-0">This is an experimental prototype. <p class="chakra-text css-n4t58t">Use with caution.</p></div></div><div class="css-8atqhb"><label for="amount" class="chakra-form__label css-g6pte">Order Type</label><div class="css-lszxnr"><button type="button" class="chakra-button css-190v8h0">Buy</button><button type="button" class="chakra-button css-82yyqd">Sell</button><button type="button" class="chakra-button css-82yyqd" disabled="">Wrap</button><button type="button" class="chakra-button css-82yyqd" disabled="">Unwrap</button></div></div><div class="css-8atqhb"><div role="group" class="chakra-form-control css-qzkjea"><label for="amount" id="field-:r1:-label" class="chakra-form__label css-1g9wl2d">Amount</label><div class="chakra-input__group css-1y0e7gb" data-group="true"><div value="0" class="chakra-numberinput css-1ik7tit"><input name="amount" inputmode="decimal" type="text" pattern="[0-9]*(.[0-9]+)?" id="amount" aria-readonly="false" aria-required="false" role="spinbutton" aria-valuemin="0" aria-valuemax="9007199254740991" aria-valuenow="0" aria-valuetext="0" autocomplete="off" autocorrect="off" class="chakra-numberinput__field css-1ads1zj" value="0"><div class="chakra-input__right-element css-17f53eh">snxUSD</div></div></div></div><div class="css-tsnkp9"><div role="group" class="chakra-form-control css-8beu02"><p class="chakra-text css-n4t58t">Slippage Tolerance:</p> 1% </div><div class="css-1jke4yk"><div class="css-14gj5yv"><div tabindex="-1" class="chakra-slider css-1t1xvy7" style="position: relative; touch-action: none; -webkit-tap-highlight-color: rgba(0, 0, 0, 0); user-select: none; outline: 0px; padding-top: 7px; padding-bottom: 7px;"><div id="slider-track-:r3:" class="chakra-slider__track css-1kykzcf" style="position: absolute; top: 50%; transform: translateY(-50%); width: 100%;"><div class="chakra-slider__filled-track css-1m7iqxj" style="position: absolute; top: 50%; transform: translateY(-50%); width: 50%; left: 0%;"></div></div><div role="slider" tabindex="0" id="slider-thumb-:r3:" aria-valuemin="1" aria-valuemax="10" aria-valuenow="5.5" aria-orientation="horizontal" aria-label="slider-ex-6" class="chakra-slider__thumb css-pa3zzn" style="position: absolute; user-select: none; touch-action: none; left: calc(50% - 7px);"></div><input type="hidden" value="5.5"></div></div></div></div></div><div class="css-8atqhb"><button type="submit" class="chakra-button css-1galir5" disabled="">Connect your wallet</button><p class="chakra-text css-10ynmar">No pending orders</p></div></div></div></div><div class="css-l6c0b3"></div></div><div class="css-ntpdvz"><div class="css-3j596c"><div id="tradingview_widget_wrapper" style="height: 100%;"><div id="tradingview_2ed79" style="height: 100%;"><div id="tradingview_8c852-wrapper" style="position: relative; box-sizing: content-box; font-family: -apple-system, BlinkMacSystemFont, &quot;Trebuchet MS&quot;, Roboto, Ubuntu, sans-serif; margin: 0px auto !important; padding: 0px !important; width: 100%; height: 100%;">
+                        <iframe title="advanced chart TradingView widget" lang="en" id="tradingview_8c852" frameborder="0" allowtransparency="true" scrolling="no" allowfullscreen="true" src="https://s.tradingview.com/widgetembed/?hideideas=1&amp;overrides=%7B%7D&amp;enabled_features=%5B%5D&amp;disabled_features=%5B%5D&amp;locale=en#%7B%22symbol%22%3A%22PYTH%3AETHUSD%22%2C%22frameElementId%22%3A%22tradingview_8c852%22%2C%22interval%22%3A%221%22%2C%22hide_side_toolbar%22%3A%220%22%2C%22allow_symbol_change%22%3A%221%22%2C%22save_image%22%3A%221%22%2C%22studies%22%3A%22%5B%5D%22%2C%22theme%22%3A%22dark%22%2C%22style%22%3A%221%22%2C%22timezone%22%3A%22UTC%22%2C%22withdateranges%22%3A%221%22%2C%22studies_overrides%22%3A%22%7B%7D%22%2C%22utm_source%22%3A%22synthetix-markets-prototype.vercel.app%22%2C%22utm_medium%22%3A%22widget%22%2C%22utm_campaign%22%3A%22chart%22%2C%22utm_term%22%3A%22PYTH%3AETHUSD%22%2C%22page-uri%22%3A%22synthetix-markets-prototype.vercel.app%2F%22%7D" style="width: 100%; height: 100%; margin: 0px !important; padding: 0px !important;"></iframe></div></div><div style="font-size: 13px; line-height: 32px; text-align: center; font-family: &quot;Trebuchet MS&quot;, Arial, sans-serif; color: rgb(157, 178, 189);"><a href="https://www.tradingview.com/symbols/PYTH:ETHUSD" target="_blank" style="text-decoration: none; color: rgb(157, 178, 189);"><span style="color: rgb(41, 98, 255);">PYTH:ETHUSD Chart </span></a>By TradingView
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<span id="__chakra_env" hidden=""></span></div>
+    
+<div class="chakra-portal"><div role="region" aria-live="polite" aria-label="Notifications" id="chakra-toast-manager-top" style="position: fixed; z-index: var(--toast-z-index, 5500); pointer-events: none; display: flex; flex-direction: column; margin: 0px auto; top: env(safe-area-inset-top, 0px); right: env(safe-area-inset-right, 0px); left: env(safe-area-inset-left, 0px);"></div>
+
+
+
+<div role="region" aria-live="polite" aria-label="Notifications" id="chakra-toast-manager-top-left" style="position: fixed; z-index: var(--toast-z-index, 5500); pointer-events: none; display: flex; flex-direction: column; top: env(safe-area-inset-top, 0px); left: env(safe-area-inset-left, 0px);">
+
+</div>
+
+<div role="section" aria-live="polite" aria-label="Notifications" id="chakra-toast-manager-top-right" style="position: fixed; z-index: var(--toast-z-index, 5500); pointer-events: none; display: flex; flex-direction: column; top: env(safe-area-inset-top, 0px); right: env(safe-area-inset-right, 0px);">
+
+</div>
+<div role="region" aria-live="polite" aria-label="Notifications" id="chakra-toast-manager-bottom-left" style="position: fixed; z-index: var(--toast-z-index, 5500); pointer-events: none; display: flex; flex-direction: column; bottom: env(safe-area-inset-bottom, 0px); left: env(safe-area-inset-left, 0px);">
+
+</div>
+
+<div role="region" aria-live="polite" aria-label="Notifications" id="chakra-toast-manager-bottom" style="position: fixed; z-index: var(--toast-z-index, 5500); pointer-events: none; display: flex; flex-direction: column; margin: 0px auto; bottom: env(safe-area-inset-bottom, 0px); right: env(safe-area-inset-right, 0px); left: env(safe-area-inset-left, 0px);">
+
+</div>
+
+<div role="region" aria-live="polite" aria-label="Notifications" id="chakra-toast-manager-bottom-right" style="position: fixed; z-index: var(--toast-z-index, 5500); pointer-events: none; display: flex; flex-direction: column; bottom: env(safe-area-inset-bottom, 0px); right: env(safe-area-inset-right, 0px);">
+
+</div>
+</div>
+<style>
+    .tradingview-widget-copyright {font-size: 13px !important; line-height: 32px !important; text-align: center !important; vertical-align: middle !important; font-family: -apple-system, BlinkMacSystemFont, 'Trebuchet MS', Roboto, Ubuntu, sans-serif !important; color: #B2B5BE !important;} .tradingview-widget-copyright .blue-text {color: #2962FF !important;} .tradingview-widget-copyright a {text-decoration: none !important; color: #B2B5BE !important;} .tradingview-widget-copyright a:visited {color: #B2B5BE !important;} .tradingview-widget-copyright a:hover .blue-text {color: #1E53E5 !important;} .tradingview-widget-copyright a:active .blue-text {color: #1848CC !important;} .tradingview-widget-copyright a:visited .blue-text {color: #2962FF !important;}
+
+
+</style>
+<iframe title="verifyAPI" id="verify-api" src="https://verify.walletconnect.com/" style="display: none;"></iframe>
+
+<style>.tradingview-widget-copyright {font-size: 13px !important; line-height: 32px !important; text-align: center !important; vertical-align: middle !important; font-family: -apple-system, BlinkMacSystemFont, 'Trebuchet MS', Roboto, Ubuntu, sans-serif !important; color: #B2B5BE !important;} .tradingview-widget-copyright .blue-text {color: #2962FF !important;} .tradingview-widget-copyright a {text-decoration: none !important; color: #B2B5BE !important;} .tradingview-widget-copyright a:visited {color: #B2B5BE !important;} .tradingview-widget-copyright a:hover .blue-text {color: #1E53E5 !important;} .tradingview-widget-copyright a:active .blue-text {color: #1848CC !important;} .tradingview-widget-copyright a:visited .blue-text {color: #2962FF !important;}
+
+</style>
+<wcm-modal>
+
+</wcm-modal>
+</body>
+</html>

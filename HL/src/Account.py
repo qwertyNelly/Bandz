@@ -1,4 +1,4 @@
-#/Users/I516172/Desktop/Bandz/.venv/bin python3
+# /Users/I516172/Desktop/Bandz/.venv/bin python3
 from HL.src.Position import position
 from HL.globals import EXCHANGE, INFO, ADDRESS
 from HL.util.logging import LOGGING_CONFIG
@@ -37,6 +37,7 @@ class account:
     positions: list[position]
     account_name: str
     _wallet: str = _wallet
+    _smwallet: str = None
     positions: position
     cross_margin_summary: float | str
     total_margin_used: float | str
@@ -61,6 +62,8 @@ class account:
     @property
     def _wallet(self):
         log.info(f"Initializing wallet : {_wallet} info from the environment")
+        
+        
 
     def update_positions(self):
         pass
@@ -101,9 +104,8 @@ class account:
     def fill_account_data(self):
         self.account_positions = self.account_data["assetPositions"]
         self.withdrawable = self.account_data["assetPositions"]["withdrawable"]
-        for position in self.account_positions['position']:
+        for position in self.account_positions["position"]:
             print(position)
-
 
 
 if __name__ == "__main__":
