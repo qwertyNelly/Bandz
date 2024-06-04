@@ -37,6 +37,7 @@ class account:
     positions: list[position]
     account_name: str
     _wallet: str = _wallet
+    _smwallet: str = None
     positions: position
     cross_margin_summary: float | str
     total_margin_used: float | str
@@ -61,6 +62,8 @@ class account:
     @property
     def _wallet(self):
         log.info(f"Initializing wallet : {_wallet} info from the environment")
+        
+        
 
     def update_positions(self):
         pass
