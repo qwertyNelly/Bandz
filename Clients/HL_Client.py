@@ -1,7 +1,7 @@
 from hyperliquid.exchange import exchange as ex
 from hyperliquid.info import Info
 from eth_account.account import Account
-from HL.utils import setup
+from HL.utils.utils import setup
 import os
 
 
