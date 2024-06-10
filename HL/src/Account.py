@@ -88,24 +88,31 @@ class account:
     def get_cross_margin_summary(self):
         if "accountValue" in self.account_data["marginSummary"]:
             log.info(f"Filling Margin Summary Information for {self.account_wallet}")
-            self.account_value = float(
-                self.account_data["crossMarginSummary"]["accountValue"]
-            )
-            self.total_margin_used = float(
-                self.account_data["crossMarginSummary"]["totalMarginUsed"]
-            )
-            self.total_notional_value = float(
-                self.account_data["crossMarginSummary"]["totalNtlPos"]
-            )
-            self.total_raw_usd = float(
-                self.account_data["crossMarginSummary"]["totalNtlPos"]
-            )
+            try:
+                self.account_value = float(
+                    self.account_data["crossMarginSummary"]["accountValue"]
+                )
+                self.total_margin_used = float(
+                    self.account_data["crossMarginSummary"]["totalMarginUsed"]
+                )
+                self.total_notional_value = float(
+                    self.account_data["crossMarginSummary"]["totalNtlPos"]
+                )
+                self.total_raw_usd = float(
+                    self.account_data["crossMarginSummary"]["totalNtlPos"]
+                )
+            except ValueError as e :
+                raise e
 
     def fill_account_data(self):
         self.account_positions = self.account_data["assetPositions"]
         self.withdrawable = self.account_data["assetPositions"]["withdrawable"]
         for position in self.account_positions["position"]:
             print(position)
+
+        pass
+
+
 
 
 if __name__ == "__main__":

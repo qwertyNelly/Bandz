@@ -5,16 +5,18 @@ import logging as lg
 import logging.config as lgc
 from HL.errors.BookExceptions import BookNotInitiatedError, IncorrectLevelDataType
 import sys
+import threading as th
 
 log = lg.getLogger(__name__)
 
-class DaBook:
+class DaBook():
     lsleveli : int = 0
     lslevel: L2Level
     lsbook : L2BookData # list[L2Level]
     l2book_msg : L2BookMsg # for WS
     ws : WebsocketManager
     ws_active : bool
+    lsthread : th.Thread
 
     def __init__(self, price : float, coin : str, size : float) -> None:
         """_summary_
@@ -57,6 +59,7 @@ class DaBook:
         
     @ws_active.setter
     def ws_active(self, active : bool):
+        log.debug(f'Setting Websocket to Active')
         self.ws_active = active
     
     @ws_active.getter
@@ -65,11 +68,16 @@ class DaBook:
             log.debug("ws is active")
             if self.ws.is_alive():
                 log.debug("ws is alive")
+            else:
+                log.debug(f'Trying to Create new Websocket for {self.coin}')
+                self.ws.run()
             
-            return self.ws        
+            return self.ws   
+
+
     @classmethod
-    def run(cls):
-        # TODO: Threading
+    def run_ws(cls):
+        # TODO: Threading or Instantiate many books
         try:
             cls.ws.run()
             cls.ws_active = True
@@ -80,7 +88,7 @@ class DaBook:
     
     def subscribe(cls):
         if cls.ws_active is True:
-            self.ws.subscribe()
+            cls.ws.subscribe()
         
 
     @classmethod

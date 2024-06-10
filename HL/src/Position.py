@@ -12,22 +12,24 @@ import logging.config as lgc
 from HL.errors.PositionExceptions import WalletNotFoundError, PositionAlreadyExists
 from logging import getLogger as gl, StreamHandler as sh
 import logging.config as lgc
+from dotenv import load_dotenv
 import time
+
+
 
 from HL.util.utils import val_wallet_is_in_env
 
-
-lgc.dictConfig(LOGGING_CONFIG)
-
+load_dotenv('.env')
 log = lg.getLogger(__name__)
+lgc.dictConfig(LOGGING_CONFIG)
 log.debug(f"Initialized Logger for {__name__}")
 log.debug(f"Initializing Hyperliquid Connection to {mainnet}")
-hl = Info(mainnet)
-log.debug(f"Connected to Hyperliquid @ {mainnet} with URL {hl.base_url}")
+log.debug(f"Connected to Hyperliquid @ {mainnet} with URL {ADDRESS.base_url}")
 
 val_wallet_is_in_env()
 
 _wallet = os.environ.get("WALLET")
+_env = os.environ.get('ENVIORNMENT')
 
 
 class position:
@@ -91,6 +93,7 @@ class position:
         self.leverage = leverage
         self.position_strat = strategy
 
+
     @property
     def active(self):
         log.debug(f"Checking if Position Exists or is Active")
@@ -106,9 +109,11 @@ class position:
                     raise PositionAlreadyExists()
             else:
                 raise PositionAlreadyExists()
+            return self.active
 
     @classmethod
     def attach_strategy(cls, strategy):
+        cls.strategy = strategy
         pass
 
     @classmethod

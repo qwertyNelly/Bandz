@@ -21,7 +21,11 @@ log = lg.getLogger(__name__)
 log.debug(f"Initialized Logger for {__name__}")
 log.debug(f"Initializing Hyperliquid Connection to {mainnet}")
 
-load_dotenv()
+env_loaded = load_dotenv()
+
+if not env_loaded:
+    raise EnvironmentError()
+
 
 
 def val_wallet_is_in_env() -> bool | WalletNotFoundError:
