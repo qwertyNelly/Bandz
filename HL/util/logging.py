@@ -1,4 +1,4 @@
-
+#/Users/I516172/Desktop/Bandz/.venv/bin python3
 import logging
 
 

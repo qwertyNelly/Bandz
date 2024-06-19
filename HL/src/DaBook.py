@@ -6,6 +6,7 @@ import logging as lg
 import logging.config as lgc
 from HL.errors.BookExceptions import BookNotInitiatedError, IncorrectLevelDataType
 import sys
+<<<<<<< HEAD
 import websocket
 import threading as thread
 from types import NamedTuple
@@ -17,14 +18,26 @@ log = lg.getLogger(__name__)
 
 
 class DaBook:
+=======
+import threading as th
+
+log = lg.getLogger(__name__)
+
+class DaBook():
+    lsleveli : int = 0
+>>>>>>> 4d2fbaa2a82cb35d64e843fd0f91b1b78367681a
     lslevel: L2Level
     lsbook : L2BookData # list[L2Level]
     l2book_msg : L2BookMsg # for WS
     ws : WebsocketManager
     ws_active : bool
+<<<<<<< HEAD
     ws_daemon : websocket.WebSocket
     coin : str
     
+=======
+    lsthread : th.Thread
+>>>>>>> 4d2fbaa2a82cb35d64e843fd0f91b1b78367681a
 
     def __init__(self, price : float, coin : str, size : float ) -> None:
         """_summary_
@@ -34,16 +47,25 @@ class DaBook:
             coin (str): name of coin
             size (float): positions size
         """
+<<<<<<< HEAD
         self.active_subscription = ActiveSubscription(self.on_message, coin, size)
         self.coin = coin
         self.lslevel = L2Level(px=price, size=size)
+=======
+        super().__init__()
+        self.lslevel = [L2Level(px=price, size=size)]  # type: list[L2Level]
+>>>>>>> 4d2fbaa2a82cb35d64e843fd0f91b1b78367681a
         self.levelsi : int = len(self.lslevel)
         self.l2book_msg = [L2Level]
         self.lsbook = L2BookData(levels=self.level, coin = self.coin, n = self.levelsi)
+<<<<<<< HEAD
 
         
         self.is_daemon = False
         self.ws = None
+=======
+        self.ws = None  # type: WebsocketManager
+>>>>>>> 4d2fbaa2a82cb35d64e843fd0f91b1b78367681a
         self.ws_active = False
         pass
     
@@ -80,7 +102,10 @@ class DaBook:
         if self.ws is None:
             log.debug(f"ws is None at {__spec__}")
             log.debug(f"Creating new WebSocket")
-            self.ws = WebsocketManager()
+            try:
+                self.ws = WebsocketManager()
+            except ConnectionError as e:
+                raise e
         elif isinstance(self.ws, WebsocketManager):
             log.debug(f'Found an instance of WS in class. Checking if its active')
             self.ws
@@ -107,21 +132,27 @@ class DaBook:
     def ws_active(self) -> bool:
         return self.ws_active
         
-    @ws_active.__setter__
+    @ws_active.setter
     def ws_active(self, active : bool):
+        log.debug(f'Setting Websocket to Active')
         self.ws_active = active
     
     @ws_active.getter
     def ws_active(self):
         if self.ws_active:
             log.debug("ws is active")
-            if self.ws.is_alive:
+            if self.ws.is_alive():
                 log.debug("ws is alive")
+            else:
+                log.debug(f'Trying to Create new Websocket for {self.coin}')
+                self.ws.run()
             
-            return self.ws        
+            return self.ws   
+
+
     @classmethod
-    def run(cls):
-        # TODO: Threading
+    def run_ws(cls):
+        # TODO: Threading or Instantiate many books
         try:
             cls.ws.run()
             cls.ws_active = True
