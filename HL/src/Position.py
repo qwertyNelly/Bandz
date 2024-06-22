@@ -203,6 +203,14 @@ class position:
 
     @classmethod
     def market_order(cls, coin: str, sz: float, is_buy: bool, leverage: float):
+        """_summary_
+
+        Args:
+            coin (str): _description_
+            sz (float): _description_
+            is_buy (bool): _description_
+            leverage (float): _description_
+        """
         print(f"We try to Market {'Buy' if is_buy else 'Sell'} {sz} {coin}.")
 
         order_result = EXCHANGE.market_open(coin, is_buy, sz, None, 0.01)
