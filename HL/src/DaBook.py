@@ -16,6 +16,7 @@ class DaBook():
     l2book_msg : L2BookMsg # for WS
     ws : WebsocketManager
     ws_active : bool
+    # TODO: Possibly add init to thread
     lsthread : th.Thread
 
     def __init__(self, price : float, coin : str, size : float) -> None:
@@ -27,15 +28,18 @@ class DaBook():
             size (float): _description_
         """
         super().__init__()
+        log.debug(f'Initializing Thread for {coin} at Book Level {0}')
         self.lslevel = [L2Level(px=price, size=size)]  # type: list[L2Level]
         self.levelsi : int = len(self.lslevel)
         self.l2book_msg = [L2Level]
         self.coin = coin
         self.lsbook = L2BookData(levels=self.level, coin = self.coin, n = self.levelsi)
         self.ws = None  # type: WebsocketManager
-        self.ws_active = False
+        self.ws_active = False 
         pass
     
+    def tmain(self):
+        self.run_ws()
     @property
     def ws(self):
         if self.ws is None:
@@ -43,6 +47,8 @@ class DaBook():
             log.debug(f"Creating new WebSocket")
             try:
                 self.ws = WebsocketManager()
+                self.run()
+                self.ws.run()
             except ConnectionError as e:
                 raise e
         elif isinstance(self.ws, WebsocketManager):
