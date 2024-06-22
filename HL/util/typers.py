@@ -4,5 +4,3 @@ from hyperliquid.utils.types import Any, Callable, Dict, List, NamedTuple, Optio
 def make_trade_subcsription(coin):
     return L2BookSubscription(coin=coin)
 
-def make_book(coin):
-    return L2BookData()
